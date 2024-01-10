@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.SymbolStore;
 
 namespace projekt_21an
 {
@@ -8,9 +9,9 @@ namespace projekt_21an
         {
             Console.WriteLine("Välkommen till 21an");
             int input = 0;
+            string vinnare = "Det finns ingen tidigare vinnare";
             while (input != 4)
             {
-
                 Console.WriteLine("Välj ett altenativ:");
                 Console.WriteLine("1. Spela 21:an");
                 Console.WriteLine("2. Visa senaste vinnaren");
@@ -18,42 +19,44 @@ namespace projekt_21an
                 Console.WriteLine("4. Avsluta");
                 input = int.Parse(Console.ReadLine());
                 Random random = new Random();
-                string vinnare = "Det finns ingen tidigare vinnare";
                 switch (input)
                 {
                     case 1:
-                        Console.WriteLine("Nu kommer två kor dras per spelare");
-                        int spelare = random.Next(1, 10) + random.Next(1,10);
-                        int dator = random.Next(1, 10) + random.Next(1,10);
-                        Console.WriteLine("Dina poäng: " + spelare);
-                        Console.WriteLine("Datorns poäng: " + dator);
-                        Console.WriteLine("Vill du dra ett till kort (j/n)");
-                        string svar = Console.ReadLine();
-                        while (svar.ToLower() == "j" && spelare <= 21)
+                        string svar = "x";
+                        int spelare = random.Next(1, 10) + random.Next(1, 10);
+                        int dator = random.Next(1, 10) + random.Next(1, 10);
+                        Console.WriteLine("Nu kommer två kort dras per spelare");
+                        while (svar != "n" && spelare <= 21)
                         {
-                            svar = "x";
-                            int nyttkort = random.Next(1, 10);
-                            Console.WriteLine("Ditt nya kort är värt " + nyttkort + " poäng");
-                            spelare += nyttkort;
                             Console.WriteLine("Dina poäng: " + spelare);
                             Console.WriteLine("Datorns poäng: " + dator);
                             Console.WriteLine("Vill du dra ett till kort (j/n)");
+                            svar = Console.ReadLine();
+                                if (svar.ToLower() == "j")
+                                {
+                                    svar = "x";
+                                    int nyttkort = random.Next(1, 10);
+                                    Console.WriteLine("Ditt nya kort är värt " + nyttkort + " poäng");
+                                    spelare += nyttkort;
+                                }   
                         }
                         int nyttkort2 = random.Next(1, 10);
                         Console.WriteLine("Datorn drog ett kort värt " + nyttkort2);
                         dator += nyttkort2;
+                        Console.WriteLine("Dina poäng: " + spelare);
                         Console.WriteLine("Datorns poäng: " + dator);
-                        if (spelare == 21 || dator > 21)
+                        if (spelare <= 21 && spelare > dator)
                         {
                             Console.WriteLine("Du vann!");
                             Console.WriteLine("Skriv in ditt namn");
                             vinnare = Console.ReadLine();
                         }
-                        else if (spelare > 21 || dator > spelare )
+                        else if (spelare > 21 || dator > spelare)
                         {
                             Console.WriteLine("Datorn vann!");
                             vinnare = "Datorn";
                         }
+                        Console.Clear();
                         break;
                     case 2:
                         Console.WriteLine("Senaste vinnaren var: " + vinnare);
